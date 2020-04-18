@@ -6,13 +6,13 @@ test(
 );
 
 test(
-  'Angle 0 corresponds to O-vector',
-  () => expect(Trig.getVelVector(0)).toEqual([0, 0])
+  'Angle 0 corresponds to vector vector (1, 0)',
+  () => expect(Trig.getVelVector(0)).toEqual([1, 0])
 );
 
 test(
-  'O-vector angle is 0',
-  () => expect(Trig.getVelAngle(0, 0)).toBe(0)
+  'O-vector angle is NaN',
+  () => expect(Trig.getVelAngle(0, 0)).toBeNaN()
 );
 
 [0, 45, 90, 135, 180, 225, 270, 315, 360].forEach(angle =>
