@@ -7,7 +7,7 @@ import Ant from './Ant';
   expect(ant.posY).toBe(posY);
   expect(ant.velX).toBe(0);
   expect(ant.velY).toBe(0);
-  ant.updateDirection();
+  ant.updateVelocity([]);
   expect(ant.velX).not.toBe(0);
   expect(ant.velY).not.toBe(0);
   ant.updatePosition();

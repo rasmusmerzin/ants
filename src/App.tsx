@@ -1,6 +1,6 @@
 import React from 'react';
 import Dot from './Dot';
-import Ant from './Ant';
+import Ant, { generateAntArray } from './Ant';
 import './App.css';
 
 
@@ -8,21 +8,18 @@ const RENDER_RATE = 60;
 
 
 const App: React.FC = () => {
-  const [ants, setAnts] = React.useState<Ant[]>([
-    new Ant({ posX: 500, posY: 200 }),
-    new Ant({ posY: 200, speed: 2 })
-  ]);
+  const [ants, setAnts] = React.useState<Ant[]>(generateAntArray(10));
 
-  const updateAntDirections = () =>
-    setAnts(ants => ants.map(ant => ant.updateDirection()));
+  const updateAntVelocities = () =>
+    setAnts(ants => ants.map(ant => ant.updateVelocity(ants)));
 
   const updateAntPositions = () =>
     setAnts(ants => ants.map(ant => ant.updatePosition()));
 
   React.useEffect(() => {
     const ticker = setInterval(() => {
-      updateAntDirections();
       updateAntPositions();
+      updateAntVelocities();
     }, 1000 /RENDER_RATE);
     return () => clearInterval(ticker);
   }, []);
