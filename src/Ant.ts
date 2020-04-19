@@ -17,8 +17,18 @@ export default class Ant {
     return [this.posX, this.posY];
   }
 
+  set pos(vec: [number, number]) {
+    this.posX = vec[0];
+    this.posY = vec[1];
+  }
+
   get vel(): [number, number] {
     return [this.velX, this.velY];
+  }
+
+  set vel(vec: [number, number]) {
+    this.velX = vec[0];
+    this.velY = vec[1];
   }
 
   get angle(): number {
@@ -53,11 +63,15 @@ export default class Ant {
         return (
           posDiff[0] <= this.distancingRange &&
           posDiff[1] <= this.distancingRange &&
-          // avoiding calculation of the hypotenuse(magnitude) if not necessary
+          // avoid calculating the hypotenuse(magnitude) if not necessary
           getVecMagnitude(posDiff) <= this.distancingRange
         );
       } else return false;
     });
+  }
+
+  calcPush(distance: number) {
+    return Math.min(this.distancingFactor *this.distancingRange /distance, this.speed);
   }
 
   updatePosition(): Ant {
@@ -71,8 +85,16 @@ export default class Ant {
   updateVelocity(neighbours: Ant[]): Ant {
     neighbours = this.getNeighboursInRange(neighbours);
     if (neighbours.length > 0) {
-      this.velX = 0;
-      this.velY = 0;
+      const vel: [number, number] = [0, 0];
+      neighbours.map(ant => getVecDiffInLoopingGrid(this.pos, ant.pos, [window.innerWidth, window.innerHeight]))
+        .forEach(posDiff => {
+          const push = this.calcPush(getVecMagnitude(posDiff));
+          const pushAngle = vecToAng(posDiff) +180;
+          const pushVector = angToVec(pushAngle, push);
+          vel[0] += pushVector[0];
+          vel[1] += pushVector[1];
+        });
+      this.vel = vel;
     } else {
       let angle = this.angle;
       if (isNaN(angle)) angle = 0;
