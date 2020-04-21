@@ -1,7 +1,13 @@
-.peep {
+@keyframes emerge {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}
+
+.dot {
   position: absolute;
   background: #fff;
   width: 10px;
   height: 10px;
-  border-radius: 5px;
+  border-radius: 100vmax;
+  animation: .05s emerge;
 }

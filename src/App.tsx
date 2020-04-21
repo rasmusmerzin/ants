@@ -38,9 +38,9 @@ const reducer = (state: State, action: Action): State => {
         ants: state.ants.map(ant => ant.updatePosition())
       };
     case 'mouseDown':
-      return { ...state, mouseDown: true }
+      return { ...state, mouseDown: true, mousePos: action.pos || state.mousePos }
     case 'mouseUp':
-      return { ...state, mouseDown: false }
+      return { ...state, mouseDown: false, mousePos: action.pos || state.mousePos }
     case 'mouseMove':
       if (action.pos) return { ...state, mousePos: action.pos }
   }
@@ -65,7 +65,10 @@ const App: React.FC = () => {
 
   return <div
     id='app'
-    onMouseDown={() => dispatch({ type: 'mouseDown' })}
+    onMouseDown={e => dispatch({
+      type: 'mouseDown',
+      pos: [e.clientX, e.clientY]
+    })}
     onMouseUp={() => dispatch({ type: 'mouseUp' })}
     onMouseMove={e => dispatch({
       type: 'mouseMove',
@@ -76,7 +79,14 @@ const App: React.FC = () => {
       key={i}
       posX={node.posX}
       posY={node.posY}
+      radius={5}
     />)}
+    {state.mouseDown && <Dot
+      posX={state.mousePos[0]}
+      posY={state.mousePos[1]}
+      radius={100}
+      opacity={.1}
+    />}
   </div>;
 };
 

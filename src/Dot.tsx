@@ -2,16 +2,21 @@ import React from 'react';
 import './Dot.css';
 
 interface Props {
-  posX: number;
-  posY: number;
+  posX: number,
+  posY: number,
+  radius: number,
+  opacity?: number
 }
 
-const Dot: React.FC<Props> = ({ posX, posY }) => {
+const Dot: React.FC<Props> = ({ posX, posY, radius, opacity }) => {
   return <div
-    className='peep'
+    className='dot'
     style={{
-      left: posX +'px',
-      top: posY +'px'
+      height: (radius *2) +'px',
+      width: (radius *2) +'px',
+      left: (posX -radius) +'px',
+      top: (posY -radius) +'px',
+      opacity
     }}
   ></div>;
 };
