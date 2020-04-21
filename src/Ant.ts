@@ -36,9 +36,11 @@ export default class Ant {
   }
 
   agility = degToRad(30);
-  speed = 5;
+  speed = 6;
+  minSpeed = 1;
+  maxSpeed = 10;
   distancingRange = 100;
-  distancingFactor = 1;
+  distancingFactor = 4;
 
   constructor(options?: {
     posX?: number,
@@ -56,7 +58,7 @@ export default class Ant {
     }
   }
 
-  getNeighboursInRange(neighbours: Ant[]): Ant[] {
+  getNeighboursInRange(neighbours: (Ant | { pos: [number, number] })[]): (Ant | { pos: [number, number] })[] {
     return neighbours.filter(ant => {
       if (ant !== this) {
         const posDiff = getVecDiffInLoopingGrid(this.pos, ant.pos, [window.innerWidth, window.innerHeight]);
@@ -71,7 +73,7 @@ export default class Ant {
   }
 
   calcPush(distance: number) {
-    return Math.min(this.distancingFactor *this.distancingRange /distance, this.speed);
+    return Math.min(this.minSpeed +this.distancingFactor *this.distancingRange /distance -1, this.maxSpeed);
   }
 
   updatePosition(): Ant {
@@ -82,7 +84,7 @@ export default class Ant {
     return this;
   };
 
-  updateVelocity(neighbours: Ant[]): Ant {
+  updateVelocity(neighbours: (Ant | { pos: [number, number] })[]): Ant {
     neighbours = this.getNeighboursInRange(neighbours);
     if (neighbours.length > 0) {
       const vel: [number, number] = [0, 0];
