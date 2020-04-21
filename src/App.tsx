@@ -1,6 +1,6 @@
 import React, { useReducer } from 'react';
 import Dot from './Dot';
-import Ant, { generateAntArray } from './Ant';
+import Ant, { generateAnt, generateAntArray } from './Ant';
 import './App.css';
 
 
@@ -16,10 +16,14 @@ interface State {
 interface Action {
   type: 'updateAntVelocities'
       | 'updateAntPositions'
+      | 'increaseAntCount'
+      | 'decreaseAntCount'
+      | 'setAntCount'
       | 'mouseDown'
       | 'mouseUp'
       | 'mouseMove',
-  pos?: [number, number]
+  pos?: [number, number],
+  value?: number
 }
 
 
@@ -37,6 +41,19 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         ants: state.ants.map(ant => ant.updatePosition())
       };
+    case 'increaseAntCount':
+      for (let i=0; i < (action.value || 1); i++) state.ants.push(generateAnt());
+      return { ...state };
+    case 'decreaseAntCount':
+      for (let i=0; i < (action.value || 1); i++) state.ants.pop();
+      return { ...state };
+    case 'setAntCount':
+      if (action.value) {
+        while (state.ants.length < action.value) state.ants.push(generateAnt());
+        while (state.ants.length > action.value) state.ants.pop();
+        return { ...state };
+      }
+      break;
     case 'mouseDown':
       return { ...state, mouseDown: true, mousePos: action.pos || state.mousePos }
     case 'mouseUp':
@@ -74,6 +91,10 @@ const App: React.FC = () => {
       type: 'mouseMove',
       pos: [e.clientX, e.clientY]
     })}
+    onWheel={e => e.deltaY < 0
+      ? dispatch({ type: 'increaseAntCount' })
+      : dispatch({ type: 'decreaseAntCount' })
+    }
   >
     {state.ants.map((node, i) => <Dot
       key={i}

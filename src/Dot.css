@@ -2,6 +2,19 @@
   from { transform: scale(0); }
   to { transform: scale(1); }
 }
+@keyframes highlight {
+  from {
+    box-shadow:
+      0 0 80px #fff,
+      0 0 60px #fff,
+      0 0 60px #fff,
+      0 0 40px #fff,
+      0 0 40px #fff,
+      0 0 20px #fff,
+      0 0 20px #fff;
+  }
+  to { box-shadow: none; }
+}
 
 .dot {
   position: absolute;
@@ -9,5 +22,5 @@
   width: 10px;
   height: 10px;
   border-radius: 100vmax;
-  animation: .05s emerge;
+  animation: .05s emerge, 1s highlight;
 }

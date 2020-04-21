@@ -107,11 +107,13 @@ export default class Ant {
   };
 }
 
+export const generateAnt = (): Ant => new Ant({
+  posX: Math.random() *window.innerWidth,
+  posY: Math.random() *window.innerHeight
+});
+
 export const generateAntArray = (count: number): Ant[] => {
   const arr: Ant[] = [];
-  for (let i=0; i<count; i++) arr.push(new Ant({
-    posX: Math.random() *window.innerWidth,
-    posY: Math.random() *window.innerHeight
-  }));
+  for (let i=0; i<count; i++) arr.push(generateAnt());
   return arr;
 };
