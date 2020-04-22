@@ -8,8 +8,8 @@ import {
 
 
 export default class Ant {
-  posX = 0;
-  posY = 0;
+  posX: number;
+  posY: number;
   velX = 0;
   velY = 0;
 
@@ -35,27 +35,36 @@ export default class Ant {
     return vecToAng(this.vel);
   }
 
-  agility = degToRad(30);
-  speed = 6;
-  minSpeed = 1;
-  maxSpeed = 10;
-  distancingRange = 100;
-  distancingFactor = 4;
+  _agility = degToRad(30);
 
-  constructor(options?: {
+  set agility(ang: number) {
+    this._agility = degToRad(ang);
+  }
+
+  speed: number;
+  minSpeed: number;
+  maxSpeed: number;
+  distancingRange: number;
+  distancingFactor: number;
+
+  constructor(options: {
     posX?: number,
     posY?: number,
-    agility?: number,
-    speed?: number
+    agility: number,
+    speed: number,
+    minSpeed: number,
+    maxSpeed: number,
+    distancingRange: number,
+    distancingFactor: number
   }) {
-    if (options !== undefined) {
-      this.posX = options.posX || 0;
-      this.posY = options.posY || 0;
-      if (options.agility !== undefined)
-        this.agility = degToRad(options.agility);
-      if (options.speed !== undefined)
-        this.speed = options.speed;
-    }
+    this.posX = options.posX || (Math.random() *window.innerWidth);
+    this.posY = options.posY || (Math.random() *window.innerHeight);
+    this.agility = options.agility;
+    this.speed = options.speed;
+    this.minSpeed = options.minSpeed;
+    this.maxSpeed = options.maxSpeed;
+    this.distancingRange = options.distancingRange;
+    this.distancingFactor = options.distancingFactor;
   }
 
   getNeighboursInRange(neighbours: (Ant | { pos: [number, number] })[]): (Ant | { pos: [number, number] })[] {
@@ -100,20 +109,9 @@ export default class Ant {
     } else {
       let angle = this.angle;
       if (isNaN(angle)) angle = 0;
-      angle += (Math.random() -.5) *2 *this.agility;
+      angle += (Math.random() -.5) *2 *this._agility;
       [this.velX, this.velY] = angToVec(angle, this.speed);
     }
     return this;
   };
 }
-
-export const generateAnt = (): Ant => new Ant({
-  posX: Math.random() *window.innerWidth,
-  posY: Math.random() *window.innerHeight
-});
-
-export const generateAntArray = (count: number): Ant[] => {
-  const arr: Ant[] = [];
-  for (let i=0; i<count; i++) arr.push(generateAnt());
-  return arr;
-};

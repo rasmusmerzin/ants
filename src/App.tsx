@@ -1,7 +1,7 @@
 import React, { useReducer } from 'react';
 import Dot from './Dot';
 import Dock from './Dock';
-import Ant, { generateAnt, generateAntArray } from './Ant';
+import Ant from './Ant';
 import './App.scss';
 
 
@@ -10,16 +10,24 @@ const RENDER_RATE = 60;
 
 interface State {
   ants: Ant[],
+  antSettings: {
+    agility: number,
+    speed: number,
+    minSpeed: number,
+    maxSpeed: number,
+    distancingRange: number,
+    distancingFactor: number
+  },
   mousePos: [number, number],
   mouseDown: boolean
 }
+
+type AntSetting = 'agility' | 'speed' | 'minSpeed' | 'maxSpeed' | 'distancingRange' | 'distancingFactor';
 
 interface Action {
   type: 'updateAntVelocities'
       | 'updateAntPositions'
       | 'updateAntSetting'
-      | 'increaseAntCount'
-      | 'decreaseAntCount'
       | 'mouseDown'
       | 'mouseUp'
       | 'mouseMove',
@@ -34,35 +42,51 @@ const reducer = (state: State, action: Action): State => {
     case 'updateAntVelocities':
       const neighbours: (Ant | { pos: [number, number] })[] = [...state.ants];
       if (state.mouseDown) neighbours.push({ pos: state.mousePos });
-      return {
-        ...state,
-        ants: state.ants.map(ant => ant.updateVelocity(neighbours))
-      };
+      state.ants.forEach(ant => ant.updateVelocity(neighbours));
+      return { ...state };
     case 'updateAntPositions':
-      return {
-        ...state,
-        ants: state.ants.map(ant => ant.updatePosition())
-      };
+      state.ants.forEach(ant => ant.updatePosition());
+      return { ...state };
     case 'updateAntSetting':
       if (action.setting && action.value) {
         if (action.setting === 'count') {
-          while (state.ants.length < action.value) state.ants.push(generateAnt());
+          while (state.ants.length < action.value) state.ants.push(new Ant(state.antSettings));
           while (state.ants.length > action.value) state.ants.pop();
           return { ...state };
         } else {
-          return {
-            ...state,
-            [action.setting]: action.value
+          const setting = action.setting as AntSetting;
+          const value = action.value as number;
+          state.antSettings[setting] = value;
+          if (['speed', 'minSpeed', 'maxSpeed'].indexOf(setting) !== -1) {
+            state.antSettings.minSpeed = Math.min(
+              state.antSettings.minSpeed,
+              state.antSettings.maxSpeed,
+              state.antSettings.speed,
+            );
+            state.antSettings.maxSpeed = Math.max(
+              state.antSettings.minSpeed,
+              state.antSettings.maxSpeed,
+              state.antSettings.speed
+            );
+            state.antSettings.speed = Math.min(
+              Math.max(
+                state.antSettings.speed,
+                state.antSettings.minSpeed
+              ),
+              state.antSettings.maxSpeed
+            );
+            state.ants.forEach(ant => {
+              ant.speed = state.antSettings.speed;
+              ant.minSpeed = state.antSettings.minSpeed;
+              ant.maxSpeed = state.antSettings.maxSpeed;
+            });
+          } else {
+            state.ants.forEach(ant => { ant[setting] = value; });
           }
+          return { ...state }
         }
       }
       break;
-    case 'increaseAntCount':
-      for (let i=0; i < (action.value || 1); i++) state.ants.push(generateAnt());
-      return { ...state };
-    case 'decreaseAntCount':
-      for (let i=0; i < (action.value || 1); i++) state.ants.pop();
-      return { ...state };
     case 'mouseDown':
       return { ...state, mouseDown: true, mousePos: action.pos || state.mousePos }
     case 'mouseUp':
@@ -76,7 +100,15 @@ const reducer = (state: State, action: Action): State => {
 
 const App: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, {
-    ants: generateAntArray(30),
+    ants: [],
+    antSettings: {
+      agility: 30,
+      speed: 6,
+      minSpeed: 1,
+      maxSpeed: 10,
+      distancingRange: 100,
+      distancingFactor: 2,
+    },
     mousePos: [0, 0],
     mouseDown: false
   });
@@ -86,6 +118,13 @@ const App: React.FC = () => {
       dispatch({ type: 'updateAntPositions' });
       dispatch({ type: 'updateAntVelocities' });
     }, 1000 /RENDER_RATE);
+
+    dispatch({
+      type: 'updateAntSetting',
+      setting: 'count',
+      value: 30
+    });
+
     return () => clearInterval(ticker);
   }, []);
 
@@ -102,10 +141,6 @@ const App: React.FC = () => {
         type: 'mouseMove',
         pos: [e.clientX, e.clientY]
       })}
-      onWheel={e => e.deltaY < 0
-        ? dispatch({ type: 'increaseAntCount' })
-        : dispatch({ type: 'decreaseAntCount' })
-      }
       style={{
         cursor: state.mouseDown ? 'grab' : 'pointer'
       }}
@@ -129,13 +164,50 @@ const App: React.FC = () => {
           label: 'count',
           value: state.ants.length,
           min: 1,
+          max: 200
+        },
+        {
+          label: 'agility',
+          value: state.antSettings.agility,
+          min: 1,
+          max: 90
+        },
+        {
+          label: 'minSpeed',
+          value: state.antSettings.minSpeed,
+          min: 1,
+          max: 50
+        },
+        {
+          label: 'speed',
+          value: state.antSettings.speed,
+          min: 1,
+          max: 50
+        },
+        {
+          label: 'maxSpeed',
+          value: state.antSettings.maxSpeed,
+          min: 1,
+          max: 50
+        },
+        {
+          label: 'distancingRange',
+          value: state.antSettings.distancingRange,
+          min: 10,
           max: 200,
-          step: 1
+          step: 10
+        },
+        {
+          label: 'distancingFactor',
+          value: state.antSettings.distancingFactor,
+          min: .1,
+          max: 4,
+          step: .1
         }
       ]}
       update={(setting: string, value: number) => dispatch({
         type: 'updateAntSetting',
-        setting,
+        setting: setting as AntSetting,
         value
       })}
     />
