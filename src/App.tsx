@@ -154,7 +154,7 @@ const App: React.FC = () => {
       {state.mouseDown && <Dot
         posX={state.mousePos[0]}
         posY={state.mousePos[1]}
-        radius={100}
+        radius={state.antSettings.distancingRange}
         opacity={.1}
       />}
     </div>
