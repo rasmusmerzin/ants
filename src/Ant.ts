@@ -7,6 +7,12 @@ import {
 } from './Trig';
 
 
+interface Push {
+  posDiff: [number, number],
+  distance: number
+}
+
+
 export default class Ant {
   posX: number;
   posY: number;
@@ -67,18 +73,18 @@ export default class Ant {
     this.distancingFactor = options.distancingFactor;
   }
 
-  getNeighboursInRange(neighbours: (Ant | { pos: [number, number] })[]): (Ant | { pos: [number, number] })[] {
-    return neighbours.filter(ant => {
+  getPushes(neighbours: (Ant | { pos: [number, number] })[]): Push[] {
+    return neighbours.map((ant): Push | null => {
       if (ant !== this) {
         const posDiff = getVecDiffInLoopingGrid(this.pos, ant.pos, [window.innerWidth, window.innerHeight]);
-        return (
-          posDiff[0] <= this.distancingRange &&
-          posDiff[1] <= this.distancingRange &&
-          // avoid calculating the hypotenuse(magnitude) if not necessary
-          getVecMagnitude(posDiff) <= this.distancingRange
-        );
-      } else return false;
-    });
+        // avoid calculating the hypotenuse(magnitude) if not necessary
+        if (posDiff[0] <= this.distancingRange && posDiff[1] <= this.distancingRange) {
+          const distance = getVecMagnitude(posDiff);
+          if (distance <= this.distancingRange) return { posDiff, distance };
+          else return null;
+        } else return null;
+      } else return null;
+    }).filter(push => push !== null) as Push[];
   }
 
   calcPush(distance: number) {
@@ -94,17 +100,15 @@ export default class Ant {
   };
 
   updateVelocity(neighbours: (Ant | { pos: [number, number] })[]): Ant {
-    neighbours = this.getNeighboursInRange(neighbours);
-    if (neighbours.length > 0) {
+    const pushes = this.getPushes(neighbours);
+    if (pushes.length > 0) {
       const vel: [number, number] = [0, 0];
-      neighbours.map(ant => getVecDiffInLoopingGrid(this.pos, ant.pos, [window.innerWidth, window.innerHeight]))
-        .forEach(posDiff => {
-          const push = this.calcPush(getVecMagnitude(posDiff));
-          const pushAngle = vecToAng(posDiff) +180;
-          const pushVector = angToVec(pushAngle, push);
-          vel[0] += pushVector[0];
-          vel[1] += pushVector[1];
-        });
+      pushes.forEach(push => {
+        const pushAngle = vecToAng(push.posDiff) +Math.PI;
+        const pushVector = angToVec(pushAngle, this.calcPush(push.distance));
+        vel[0] += pushVector[0];
+        vel[1] += pushVector[1];
+      });
       this.vel = vel;
     } else {
       let angle = this.angle;
