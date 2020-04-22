@@ -1,0 +1,39 @@
+#app {
+  --bg: #1c1c1c;
+  --bg-h: #444;
+  --bg-ha1: #444a;
+  --bg-ha2: #4445;
+  --fg: #fff;
+  --fg-h: #aaa;
+  --fg-ha1: #aaaa;
+  --fg-ha2: #aaa5;
+  --corner: 4px;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--bg);
+  color: var(--fg);
+
+  #canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  button {
+    cursor: pointer;
+    background: inherit;
+    border: none;
+    color: inherit;
+    font: inherit;
+  }
+
+  input[type=range] {
+    cursor: pointer;
+  }
+}

@@ -1,0 +1,68 @@
+#dock {
+  --ctrl-width: 20rem;
+  --door-size: 2.4rem;
+  --transition-time: .1s;
+
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 0;
+
+  .ctrl {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: var(--ctrl-width);
+    height: 100%;
+    background: var(--bg-ha1);
+    box-sizing: border-box;
+    padding: 1rem;
+
+    display: grid;
+    grid-template-columns: minmax(5rem, auto) 1fr;
+    align-content: start;
+    grid-gap: 1rem;
+
+    @keyframes dock-open-ctrl {
+      from {
+        background: var(--bg-ha2);
+        width: var(--door-size);
+      }
+      to {
+        background: var(--bg-ha1);
+        width: var(--ctrl-width);
+      }
+    }
+
+    &.open {
+      animation: var(--transition-time) dock-open-ctrl;
+    }
+    &.closed {
+      background: var(--bg-ha2);
+      width: var(--door-size);
+
+      * { display: none; }
+    }
+  }
+
+  .door {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    font-size: 2rem;
+    width: var(--door-size);
+    height: var(--door-size);
+    background: var(--bg-h);
+
+    @keyframes dock-open-door {
+      from { width: var(--door-size); }
+      to { width: var(--ctrl-width); }
+    }
+
+    &.open {
+      width: var(--ctrl-width);
+      animation: var(--transition-time) dock-open-door;
+    }
+  }
+}
