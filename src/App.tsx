@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, TouchList } from 'react';
 import Dot from './components/Dot';
 import Dock from './components/Dock';
 import Ant from './logic/Ant';
@@ -7,6 +7,7 @@ import './App.scss';
 
 const RENDER_RATE = 60;
 
+type Touch = [number, number];
 
 interface State {
   ants: Ant[],
@@ -19,7 +20,8 @@ interface State {
     distancingFactor: number
   },
   mousePos: [number, number],
-  mouseDown: boolean
+  mouseDown: boolean,
+  touches: Touch[]
 }
 
 type AntSetting = 'agility' | 'speed' | 'minSpeed' | 'maxSpeed' | 'distancingRange' | 'distancingFactor';
@@ -30,10 +32,12 @@ interface Action {
       | 'updateAntSetting'
       | 'mouseDown'
       | 'mouseUp'
-      | 'mouseMove',
+      | 'mouseMove'
+      | 'touch',
   pos?: [number, number],
   setting?: string,
-  value?: number
+  value?: number,
+  touches?: TouchList
 }
 
 
@@ -42,6 +46,7 @@ const reducer = (state: State, action: Action): State => {
     case 'updateAntVelocities':
       const neighbours: (Ant | { pos: [number, number] })[] = [...state.ants];
       if (state.mouseDown) neighbours.push({ pos: state.mousePos });
+      state.touches.forEach(touch => neighbours.push({ pos: touch }));
       state.ants.forEach(ant => ant.updateVelocity(neighbours));
       return { ...state };
     case 'updateAntPositions':
@@ -93,6 +98,16 @@ const reducer = (state: State, action: Action): State => {
       return { ...state, mouseDown: false, mousePos: action.pos || state.mousePos }
     case 'mouseMove':
       if (action.pos) return { ...state, mousePos: action.pos }
+      break;
+    case 'touch':
+      state.touches = [];
+      if (action.touches) {
+        for (let i=0; i < action.touches.length; i++) {
+          const item = action.touches.item(i);
+          if (item) state.touches.push([item.clientX, item.clientY]);
+        }
+      }
+      return { ...state };
   }
   return state;
 };
@@ -110,7 +125,8 @@ const App: React.FC = () => {
       distancingFactor: 2,
     },
     mousePos: [0, 0],
-    mouseDown: false
+    mouseDown: false,
+    touches: []
   });
 
   React.useEffect(() => {
@@ -132,15 +148,14 @@ const App: React.FC = () => {
     id='app'
   >
     <div id='canvas'
-      onMouseDown={e => dispatch({
-        type: 'mouseDown',
-        pos: [e.clientX, e.clientY]
-      })}
+      onMouseDown={e => dispatch({ type: 'mouseDown', pos: [e.clientX, e.clientY] })}
+      onMouseMove={e => dispatch({ type: 'mouseMove', pos: [e.clientX, e.clientY] })}
       onMouseUp={() => dispatch({ type: 'mouseUp' })}
-      onMouseMove={e => dispatch({
-        type: 'mouseMove',
-        pos: [e.clientX, e.clientY]
-      })}
+
+      onTouchStart={e => dispatch({ type: 'touch', touches: e.touches })}
+      onTouchMove={e => dispatch({ type: 'touch', touches: e.touches })}
+      onTouchEnd={() => dispatch({ type: 'touch' })}
+
       style={{
         cursor: state.mouseDown ? 'grab' : 'pointer'
       }}
@@ -157,6 +172,12 @@ const App: React.FC = () => {
         radius={state.antSettings.distancingRange}
         opacity={.1}
       />}
+      {state.touches.map(touch => <Dot
+        posX={touch[0]}
+        posY={touch[1]}
+        radius={state.antSettings.distancingRange}
+        opacity={.1}
+      />)}
     </div>
     <Dock
       fields={[
