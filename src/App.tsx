@@ -1,7 +1,7 @@
 import React, { useReducer } from 'react';
-import Dot from './Dot';
-import Dock from './Dock';
-import Ant from './Ant';
+import Dot from './components/Dot';
+import Dock from './components/Dock';
+import Ant from './logic/Ant';
 import './App.scss';
 
 
