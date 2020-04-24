@@ -57,7 +57,7 @@ const reducer = (state: State, action: Action): State => {
           const setting = action.setting as AntSetting;
           const value = action.value as number;
           state.antSettings[setting] = value;
-          if (['speed', 'minSpeed', 'maxSpeed'].indexOf(setting) !== -1) {
+          /*if (['speed', 'minSpeed', 'maxSpeed'].indexOf(setting) !== -1) {
             state.antSettings.minSpeed = Math.min(
               state.antSettings.minSpeed,
               state.antSettings.maxSpeed,
@@ -80,9 +80,9 @@ const reducer = (state: State, action: Action): State => {
               ant.minSpeed = state.antSettings.minSpeed;
               ant.maxSpeed = state.antSettings.maxSpeed;
             });
-          } else {
+          } else {*/
             state.ants.forEach(ant => { ant[setting] = value; });
-          }
+          //}
           return { ...state }
         }
       }
@@ -161,44 +161,48 @@ const App: React.FC = () => {
     <Dock
       fields={[
         {
-          label: 'count',
+          key: 'count',
           value: state.ants.length,
           min: 1,
           max: 200
         },
         {
-          label: 'agility',
+          key: 'agility',
           value: state.antSettings.agility,
           min: 1,
           max: 90
         },
         {
-          label: 'minSpeed',
+          key: 'speed',
+          value: state.antSettings.speed,
+          min: 1,
+          max: 50
+        },
+        /*{
+          key: 'minSpeed',
+          label: 'minimum speed',
           value: state.antSettings.minSpeed,
           min: 1,
           max: 50
         },
         {
-          label: 'speed',
-          value: state.antSettings.speed,
-          min: 1,
-          max: 50
-        },
-        {
-          label: 'maxSpeed',
+          key: 'maxSpeed',
+          label: 'maximum speed',
           value: state.antSettings.maxSpeed,
           min: 1,
           max: 50
-        },
+        },*/
         {
-          label: 'distancingRange',
+          key: 'distancingRange',
+          label: 'distancing range',
           value: state.antSettings.distancingRange,
           min: 10,
           max: 200,
           step: 10
         },
         {
-          label: 'distancingFactor',
+          key: 'distancingFactor',
+          label: 'distancing factor',
           value: state.antSettings.distancingFactor,
           min: .1,
           max: 4,

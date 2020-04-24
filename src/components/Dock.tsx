@@ -3,7 +3,8 @@ import './Dock.scss';
 
 interface Props {
   fields: {
-    label: string,
+    label?: string,
+    key: string,
     value: number,
     min?: number,
     max?: number,
@@ -20,14 +21,14 @@ const Dock: React.FC<Props> = ({ fields, update }) => {
       className={'ctrl' +(visible ? ' open' : ' closed')}
     >
       {fields.map((obj, i) => <Fragment key={i}>
-        <label>{obj.label} <span className='value'>{obj.value}</span></label>
+        <label>{obj.label || obj.key} <span className='value'>{obj.value}</span></label>
         <input
           type='range'
           value={obj.value}
           min={obj.min}
           max={obj.max}
           step={obj.step}
-          onChange={e => update(obj.label, Number(e.target.value))}
+          onChange={e => update(obj.key, Number(e.target.value))}
         />
       </Fragment>)}
     </div>
