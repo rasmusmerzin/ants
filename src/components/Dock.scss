@@ -1,10 +1,10 @@
-#dock {
-  --ctrl-width: 30rem;
-  --door-size: 2.4rem;
-  --transition-time: .05s;
+$door-size: 2.4rem;
+$ctrl-width: 30rem;
+$transition-time: .05s;
 
+#dock {
   position: absolute;
-  right: 0;
+  left: 0;
   top: 0;
   height: 100%;
   width: 0;
@@ -12,19 +12,20 @@
   .ctrl {
     position: absolute;
     top: 0;
-    right: 0;
+    left: 0;
     max-width: 80vw;
-    width: var(--ctrl-width);
+    width: $ctrl-width;
     height: 100%;
     background: var(--bg-ha1);
     box-sizing: border-box;
     padding: 1rem;
+    padding-top: calc(1rem +#{$door-size});
 
     display: grid;
     grid-template-columns: minmax(10rem, auto) 1fr;
     align-content: start;
     grid-gap: 1rem;
-    transition: all var(--transition-time);
+    transition: all $transition-time;
 
     label {
       text-transform: capitalize;
@@ -37,7 +38,7 @@
 
     &.closed {
       background: var(--bg-ha2);
-      width: var(--door-size);
+      width: $door-size;
 
       * { display: none; }
     }
@@ -45,15 +46,15 @@
 
   .door {
     position: absolute;
-    bottom: 0;
-    right: 0;
+    top: 0;
+    left: 0;
     font-size: 2rem;
     max-width: 80vw;
-    width: var(--door-size);
-    height: var(--door-size);
+    width: $door-size;
+    height: $door-size;
     background: var(--bg-h);
-    transition: all var(--transition-time);
+    transition: all $transition-time;
 
-    &.open { width: var(--ctrl-width); }
+    &.open { width: $ctrl-width; }
   }
 }
