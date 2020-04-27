@@ -5,11 +5,10 @@ import Ant from './logic/Ant';
 import './App.scss';
 
 
-const RENDER_RATE = 60;
-
 type Touch = [number, number];
 
 interface State {
+  renderRate: number,
   ants: Ant[],
   antSettings: {
     agility: number,
@@ -29,13 +28,13 @@ type AntSetting = 'agility' | 'speed' | 'minSpeed' | 'maxSpeed' | 'distancingRan
 interface Action {
   type: 'updateAntVelocities'
       | 'updateAntPositions'
-      | 'updateAntSetting'
+      | 'updateSettings'
       | 'mouseDown'
       | 'mouseUp'
       | 'mouseMove'
       | 'touch',
   pos?: [number, number],
-  setting?: string,
+  setting?: AntSetting | 'count' | 'renderRate',
   value?: number,
   touches?: TouchList
 }
@@ -52,42 +51,19 @@ const reducer = (state: State, action: Action): State => {
     case 'updateAntPositions':
       state.ants.forEach(ant => ant.updatePosition());
       return { ...state };
-    case 'updateAntSetting':
+    case 'updateSettings':
       if (action.setting && action.value) {
         if (action.setting === 'count') {
           while (state.ants.length < action.value) state.ants.push(new Ant(state.antSettings));
           while (state.ants.length > action.value) state.ants.pop();
           return { ...state };
+        } else if (action.setting === 'renderRate') {
+          return { ...state, renderRate: action.value };
         } else {
           const setting = action.setting as AntSetting;
           const value = action.value as number;
           state.antSettings[setting] = value;
-          /*if (['speed', 'minSpeed', 'maxSpeed'].indexOf(setting) !== -1) {
-            state.antSettings.minSpeed = Math.min(
-              state.antSettings.minSpeed,
-              state.antSettings.maxSpeed,
-              state.antSettings.speed,
-            );
-            state.antSettings.maxSpeed = Math.max(
-              state.antSettings.minSpeed,
-              state.antSettings.maxSpeed,
-              state.antSettings.speed
-            );
-            state.antSettings.speed = Math.min(
-              Math.max(
-                state.antSettings.speed,
-                state.antSettings.minSpeed
-              ),
-              state.antSettings.maxSpeed
-            );
-            state.ants.forEach(ant => {
-              ant.speed = state.antSettings.speed;
-              ant.minSpeed = state.antSettings.minSpeed;
-              ant.maxSpeed = state.antSettings.maxSpeed;
-            });
-          } else {*/
-            state.ants.forEach(ant => { ant[setting] = value; });
-          //}
+          state.ants.forEach(ant => { ant[setting] = value; });
           return { ...state }
         }
       }
@@ -115,6 +91,7 @@ const reducer = (state: State, action: Action): State => {
 
 const App: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, {
+    renderRate: 60,
     ants: [],
     antSettings: {
       agility: 30,
@@ -129,20 +106,22 @@ const App: React.FC = () => {
     touches: []
   });
 
+  React.useEffect(() => dispatch({
+    type: 'updateSettings',
+    setting: 'count',
+    value: 30
+  }), []);
+
   React.useEffect(() => {
     const ticker = setInterval(() => {
       dispatch({ type: 'updateAntPositions' });
       dispatch({ type: 'updateAntVelocities' });
-    }, 1000 /RENDER_RATE);
+    }, 1000 /state.renderRate);
 
-    dispatch({
-      type: 'updateAntSetting',
-      setting: 'count',
-      value: 30
-    });
+    console.log('render init');
 
     return () => clearInterval(ticker);
-  }, []);
+  }, [state.renderRate]);
 
   return <div
     id='app'
@@ -154,7 +133,7 @@ const App: React.FC = () => {
 
       onTouchStart={e => dispatch({ type: 'touch', touches: e.touches })}
       onTouchMove={e => dispatch({ type: 'touch', touches: e.touches })}
-      onTouchEnd={() => dispatch({ type: 'touch' })}
+      onTouchEnd={e => dispatch({ type: 'touch', touches: e.touches })}
 
       style={{
         cursor: state.mouseDown ? 'grab' : 'pointer'
@@ -172,7 +151,8 @@ const App: React.FC = () => {
         radius={state.antSettings.distancingRange}
         opacity={.1}
       />}
-      {state.touches.map(touch => <Dot
+      {state.touches.map((touch, i) => <Dot
+        key={i}
         posX={touch[0]}
         posY={touch[1]}
         radius={state.antSettings.distancingRange}
@@ -181,6 +161,14 @@ const App: React.FC = () => {
     </div>
     <Dock
       fields={[
+        {
+          key: 'renderRate',
+          label: 'render rate',
+          value: state.renderRate,
+          min: 1,
+          max: 60,
+          step: 1
+        },
         {
           key: 'count',
           value: state.ants.length,
@@ -199,20 +187,6 @@ const App: React.FC = () => {
           min: 1,
           max: 50
         },
-        /*{
-          key: 'minSpeed',
-          label: 'minimum speed',
-          value: state.antSettings.minSpeed,
-          min: 1,
-          max: 50
-        },
-        {
-          key: 'maxSpeed',
-          label: 'maximum speed',
-          value: state.antSettings.maxSpeed,
-          min: 1,
-          max: 50
-        },*/
         {
           key: 'distancingRange',
           label: 'distancing range',
@@ -231,7 +205,7 @@ const App: React.FC = () => {
         }
       ]}
       update={(setting: string, value: number) => dispatch({
-        type: 'updateAntSetting',
+        type: 'updateSettings',
         setting: setting as AntSetting,
         value
       })}
