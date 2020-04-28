@@ -28,17 +28,19 @@ I used [Node.js](https://nodejs.org) 14.0.0 and [Yarn](https://classic.yarnpkg.c
 
 > Note: I found out that with these versions of Node.js and Yarn and with node-sass versions 4.13.1 and 4.14.0 using CSS variables `var(--`*var*`)` in `calc()` functions compiles in development mode but throws an error during `react-scripts build`. In such cases I used Sass variables.
 
+Module versions and scripts are available in [package.json](https://github.com/rasmusmerzin/ants/blob/master/package.json).
+
 ### Downloading and installing
 
-Clone the git repository with `git clone https://github.com/rasmusmerzin/ants.git`
+Clone the git repository with `git clone https://github.com/rasmusmerzin/ants.git`.
 
-Change working directory to ants with `cd ants`
+Change working directory to ants with `cd ants`.
 
-When Node.js and yarn or npm are installed one can install needed node modules with `yarn` or `npm install`
+When Node.js and yarn or npm are installed one can install needed node modules with `yarn` or `npm install`.
 
 ### Running the app
 
-When node modules are installed it is possible to run the app in development mode with `yarn start` or `npm start`
+When node modules are installed it is possible to run the app in development mode with `yarn start` or `npm start`.
 
 Open http://localhost:3000 to view it in the browser.
 
@@ -46,17 +48,36 @@ More about development mode at [create-react-app.dev](https://create-react-app.d
 
 ### Running tests
 
-To run tests `yarn test` or `npm test`
+To run tests `yarn test` or `npm test`.
 
 More about running tests at [create-react-app.dev](https://create-react-app.dev/docs/available-scripts#npm-test).
 
-### Production build
-
 ### GitHub Pages
 
-.## User interface
+To deploy the app to GitHub Pages `yarn deploy` or `npm run deploy`.
 
-.## Algorithm
+Deploy script first creates the production build with `react-scripts build` with project root as [rasmusmerzin.github.io/ants](https://rasmusmerzin.github.io/ants) and removes source map files.
+Then the build directory is uploaded to branch `gh-pages` at [github.com/rasmusmerzin/ants](https://github.com/rasmusmerzin/ants/tree/gh-pages) which is then served by github.
+
+More about `react-app build` at [create-react-app.dev](https://create-react-app.dev/docs/available-scripts#npm-run-build).  
+More about `gh-pages` at [npmjs.com](https://www.npmjs.com/package/gh-pages#command-line-utility).
+
+## User interface
+
+When the web page is opened 30 ants are drawn and updated 60 times per second.
+
+Clicking and holding on the screen creates a highlight which ants are trying to avoid.
+It also shows current distancing range.
+
+In the top left corner there is hamburger icon which opens a menu to configure simulation settings.
+
+## Algorithm
+
+When the app [component is mounted](https://github.com/rasmusmerzin/ants/blob/845969b2c20dbbaa3daeb34032775f974dbfe9c7/src/App.tsx#L109-L113) 30 objects of class [Ant](https://github.com/rasmusmerzin/ants/blob/master/src/logic/Ant.ts) are randomly placed in the window space.
+
+Additionally a [job is initialized](https://github.com/rasmusmerzin/ants/blob/845969b2c20dbbaa3daeb34032775f974dbfe9c7/src/App.tsx#L115-L124) which calculates a velocity and the new position depending on that velocity for each Ant object with an interval depending on the render rate ([state.renderRate](https://github.com/rasmusmerzin/ants/blob/845969b2c20dbbaa3daeb34032775f974dbfe9c7/src/App.tsx#L94)).
+
+For each [Ant](https://github.com/rasmusmerzin/ants/blob/master/src/logic/Ant.ts) object a React component [Dot](https://github.com/rasmusmerzin/ants/blob/master/src/components/Dot.tsx) is [mapped](https://github.com/rasmusmerzin/ants/blob/845969b2c20dbbaa3daeb34032775f974dbfe9c7/src/App.tsx#L142-L147). They are kept in sync by React runtime.
 
 ## Mathematics
 
