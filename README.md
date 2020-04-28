@@ -1,11 +1,11 @@
 <h1 style='text-align: center'>An<img src='https://rasmusmerzin.github.io/static/media/TypeScript.a14d1459.svg' alt='TS' height='36px' /></h1>
 
-Ants is a simple web application rendering dots (ants) which move avoiding the cursor and each other.
+Goal of this project was to create a web application rendering dots (ants) which move avoiding the cursor and each other.
 
 This project was created with [TypeScript](https://www.typescriptlang.org) [React](https://reactjs.org).
 Trigonometric functions have tests created using [Jest](https://jestjs.io).
 
-Ants is available at https://rasmusmerzin.github.io/ants.
+Ants is available at [rasmusmerzin.github.io/ants](https://rasmusmerzin.github.io/ants).
 
 ## Table of contents
 * [Setup](#Setup)
