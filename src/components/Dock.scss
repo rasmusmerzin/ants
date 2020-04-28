@@ -21,28 +21,27 @@ $transition-time: .05s;
     padding: 1rem;
     padding-top: 2rem +$door-size;
 
-    display: grid;
-    grid-template-columns: minmax(10rem, auto) 1fr;
-    align-content: start;
-    grid-gap: 1rem;
-    transition: all $transition-time;
+    .settings {
+      display: grid;
+      grid-template-columns: minmax(10rem, auto) 1fr;
+      align-content: start;
+      grid-gap: 1rem;
+      transition: all $transition-time;
 
-    label {
-      text-transform: capitalize;
-      span.value {
-        font-style: italic;
-        opacity: .7;
-        float: right;
+      label {
+        text-transform: capitalize;
+        span.value {
+          font-style: italic;
+          opacity: .7;
+          float: right;
+        }
       }
     }
 
     .source {
-      position: absolute;
-      bottom: 0;
-      left: 0;
       width: 100%;
       text-align: center;
-      margin-bottom: 20%;
+      margin: 4rem 0;
 
       a {
         opacity: .5;

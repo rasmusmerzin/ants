@@ -22,17 +22,19 @@ const Dock: React.FC<Props> = ({ fields, update }) => {
     <div
       className={'ctrl' +(visible ? ' open' : ' closed')}
     >
-      {fields.map((obj, i) => <Fragment key={i}>
-        <label>{obj.label || obj.key} <span className='value'>{obj.value}</span></label>
-        <input
-          type='range'
-          value={obj.value}
-          min={obj.min}
-          max={obj.max}
-          step={obj.step}
-          onChange={e => update(obj.key, Number(e.target.value))}
-        />
-      </Fragment>)}
+      <div className='settings'>
+        {fields.map((obj, i) => <Fragment key={i}>
+          <label>{obj.label || obj.key} <span className='value'>{obj.value}</span></label>
+          <input
+            type='range'
+            value={obj.value}
+            min={obj.min}
+            max={obj.max}
+            step={obj.step}
+            onChange={e => update(obj.key, Number(e.target.value))}
+          />
+        </Fragment>)}
+      </div>
       <div className='source'>
         <a href='https://github.com/rasmusmerzin/ants'>
           <img src={githubIcon} alt='source' />
