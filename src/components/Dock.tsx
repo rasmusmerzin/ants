@@ -1,6 +1,8 @@
 import React, { useState, Fragment } from 'react';
 import './Dock.scss';
 
+import githubIcon from '../icons/GitHub.svg';
+
 interface Props {
   fields: {
     label?: string,
@@ -31,6 +33,11 @@ const Dock: React.FC<Props> = ({ fields, update }) => {
           onChange={e => update(obj.key, Number(e.target.value))}
         />
       </Fragment>)}
+      <div className='source'>
+        <a href='https://github.com/rasmusmerzin/ants'>
+          <img src={githubIcon} alt='source' />
+        </a>
+      </div>
     </div>
     <button
       className={'door' +(visible ? ' open' : ' closed')}

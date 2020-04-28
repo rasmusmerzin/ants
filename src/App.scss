@@ -26,12 +26,15 @@
     height: 100%;
   }
 
-  button {
+  button, a {
     cursor: pointer;
-    background: inherit;
-    border: none;
     color: inherit;
     font: inherit;
+  }
+
+  button {
+    background: inherit;
+    border: none;
   }
 
   input[type=range] {
