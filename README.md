@@ -73,11 +73,11 @@ In the top left corner there is hamburger icon which opens a menu to configure s
 
 ## Algorithm
 
-When the app [component is mounted](https://github.com/rasmusmerzin/ants/blob/845969b2c20dbbaa3daeb34032775f974dbfe9c7/src/App.tsx#L109-L113) 30 objects of class [Ant](https://github.com/rasmusmerzin/ants/blob/master/src/logic/Ant.ts) are randomly placed in the window space.
+When the app [component is mounted](https://github.com/rasmusmerzin/ants/blob/80a09d4a1896afc194ec197157f1ff4cbfd9f987/src/App.tsx#L109-L113) 30 objects of class [Ant](https://github.com/rasmusmerzin/ants/blob/master/src/logic/Ant.ts) are randomly placed in the window space.
 
-Additionally a [job is initialized](https://github.com/rasmusmerzin/ants/blob/845969b2c20dbbaa3daeb34032775f974dbfe9c7/src/App.tsx#L115-L124) which calculates a velocity and the new position depending on that velocity for each Ant object with an interval depending on the render rate ([state.renderRate](https://github.com/rasmusmerzin/ants/blob/845969b2c20dbbaa3daeb34032775f974dbfe9c7/src/App.tsx#L94)).
+Additionally a [job is initialized](https://github.com/rasmusmerzin/ants/blob/80a09d4a1896afc194ec197157f1ff4cbfd9f987/src/App.tsx#L115-L122) which calculates a velocity and the new position depending on that velocity for each Ant object with an interval depending on the render rate ([state.renderRate](https://github.com/rasmusmerzin/ants/blob/80a09d4a1896afc194ec197157f1ff4cbfd9f987/src/App.tsx#L94)).
 
-For each [Ant](https://github.com/rasmusmerzin/ants/blob/master/src/logic/Ant.ts) object a React component [Dot](https://github.com/rasmusmerzin/ants/blob/master/src/components/Dot.tsx) is [mapped](https://github.com/rasmusmerzin/ants/blob/845969b2c20dbbaa3daeb34032775f974dbfe9c7/src/App.tsx#L142-L147). They are kept in sync by React runtime.
+For each [Ant](https://github.com/rasmusmerzin/ants/blob/master/src/logic/Ant.ts) object a React component [Dot](https://github.com/rasmusmerzin/ants/blob/master/src/components/Dot.tsx) is [mapped](https://github.com/rasmusmerzin/ants/blob/80a09d4a1896afc194ec197157f1ff4cbfd9f987/src/App.tsx#L140-L145). They are kept in sync by React runtime.
 
 ## Mathematics
 
