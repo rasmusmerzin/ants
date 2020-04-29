@@ -4,72 +4,57 @@ $transition-time: .05s;
 
 #dock {
   position: absolute;
-  left: 0;
   top: 0;
+  left: 0;
+  max-width: 80vw;
+  width: $ctrl-width;
   height: 100%;
-  width: 0;
+  background: var(--bg-ha1);
+  box-sizing: border-box;
+  transition: all $transition-time;
 
-  .ctrl {
-    position: absolute;
-    top: 0;
-    left: 0;
-    max-width: 80vw;
-    width: $ctrl-width;
-    height: 100%;
-    background: var(--bg-ha1);
-    box-sizing: border-box;
-    padding: 1rem;
-    padding-top: 2rem +$door-size;
+  .settings {
+    margin: 2rem 1rem;
+    display: grid;
+    grid-template-columns: minmax(10rem, auto) 1fr;
+    align-items: center;
+    grid-gap: 1rem;
 
-    .settings {
-      display: grid;
-      grid-template-columns: minmax(10rem, auto) 1fr;
-      align-content: start;
-      grid-gap: 1rem;
-      transition: all $transition-time;
-
-      label {
-        text-transform: capitalize;
-        span.value {
-          font-style: italic;
-          opacity: .7;
-          float: right;
-        }
+    label {
+      text-transform: capitalize;
+      span.value {
+        font-style: italic;
+        opacity: .7;
+        float: right;
       }
-    }
-
-    .source {
-      width: 100%;
-      text-align: center;
-      margin: 4rem 0;
-
-      a {
-        opacity: .5;
-        &:hover { opacity: 1; }
-
-        img { height: 3rem; }
-      }
-    }
-
-    &.closed {
-      background: var(--bg-ha2);
-      width: $door-size;
-
-      * { display: none; }
     }
   }
 
+  .source {
+    width: 100%;
+    text-align: center;
+    margin: 4rem 0;
+
+    a {
+      opacity: .5;
+      &:hover { opacity: 1; }
+
+      img { height: 3rem; }
+    }
+  }
+
+  &.closed {
+    background: var(--bg-ha2);
+    width: $door-size;
+
+    .source, .settings { display: none; }
+  }
+
   .door {
-    position: absolute;
-    top: 0;
-    left: 0;
     font-size: 2rem;
     max-width: 80vw;
-    width: $door-size;
+    width: 100%;
     height: $door-size;
     background: var(--bg-h);
-    transition: all $transition-time;
-
-    &.open { width: $ctrl-width; }
   }
 }

@@ -18,33 +18,32 @@ interface Props {
 const Dock: React.FC<Props> = ({ fields, update }) => {
   const [visible, setVisibility] = useState(false);
 
-  return <div id='dock'>
-    <div
-      className={'ctrl' +(visible ? ' open' : ' closed')}
-    >
-      <div className='settings'>
-        {fields.map((obj, i) => <Fragment key={i}>
-          <label>{obj.label || obj.key} <span className='value'>{obj.value}</span></label>
-          <input
-            type='range'
-            value={obj.value}
-            min={obj.min}
-            max={obj.max}
-            step={obj.step}
-            onChange={e => update(obj.key, Number(e.target.value))}
-          />
-        </Fragment>)}
-      </div>
-      <div className='source'>
-        <a href='https://github.com/rasmusmerzin/ants'>
-          <img src={githubIcon} alt='source' />
-        </a>
-      </div>
-    </div>
+  return <div
+    id='dock'
+    className={visible ? 'open' : 'closed'}
+  >
     <button
       className={'door' +(visible ? ' open' : ' closed')}
       onClick={() => setVisibility(v => !v)}
     >≡</button>
+    <div className='settings'>
+      {fields.map((obj, i) => <Fragment key={i}>
+        <label>{obj.label || obj.key} <span className='value'>{obj.value}</span></label>
+        <input
+          type='range'
+          value={obj.value}
+          min={obj.min}
+          max={obj.max}
+          step={obj.step}
+          onChange={e => update(obj.key, Number(e.target.value))}
+        />
+      </Fragment>)}
+    </div>
+    <div className='source'>
+      <a href='https://github.com/rasmusmerzin/ants'>
+        <img src={githubIcon} alt='source' />
+      </a>
+    </div>
   </div>;
 };
 
