@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/ants/static/css/main.58238961.chunk.css",
+    "main.css": "/ants/static/css/main.f001ecd0.chunk.css",
     "main.js": "/ants/static/js/main.199fba0c.chunk.js",
     "main.js.map": "/ants/static/js/main.199fba0c.chunk.js.map",
     "runtime-main.js": "/ants/static/js/runtime-main.73b50742.js",
@@ -8,16 +8,16 @@
     "static/js/2.37437d18.chunk.js": "/ants/static/js/2.37437d18.chunk.js",
     "static/js/2.37437d18.chunk.js.map": "/ants/static/js/2.37437d18.chunk.js.map",
     "index.html": "/ants/index.html",
-    "precache-manifest.70c175f1ade427005bcfa7b0fecdab02.js": "/ants/precache-manifest.70c175f1ade427005bcfa7b0fecdab02.js",
+    "precache-manifest.34299823c48b1c7495e1e7f009f8bb3c.js": "/ants/precache-manifest.34299823c48b1c7495e1e7f009f8bb3c.js",
     "service-worker.js": "/ants/service-worker.js",
-    "static/css/main.58238961.chunk.css.map": "/ants/static/css/main.58238961.chunk.css.map",
+    "static/css/main.f001ecd0.chunk.css.map": "/ants/static/css/main.f001ecd0.chunk.css.map",
     "static/js/2.37437d18.chunk.js.LICENSE.txt": "/ants/static/js/2.37437d18.chunk.js.LICENSE.txt",
     "static/media/GitHub.svg": "/ants/static/media/GitHub.ec6c0035.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.73b50742.js",
     "static/js/2.37437d18.chunk.js",
-    "static/css/main.58238961.chunk.css",
+    "static/css/main.f001ecd0.chunk.css",
     "static/js/main.199fba0c.chunk.js"
   ]
 }
