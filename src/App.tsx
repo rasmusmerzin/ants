@@ -118,8 +118,6 @@ const App: React.FC = () => {
       dispatch({ type: 'updateAntVelocities' });
     }, 1000 /state.renderRate);
 
-    console.log('render init');
-
     return () => clearInterval(ticker);
   }, [state.renderRate]);
 
