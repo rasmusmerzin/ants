@@ -8,25 +8,26 @@ Trigonometric functions have tests created using [Jest](https://jestjs.io).
 Ants is available at [rasmusmerzin.github.io/ants](https://rasmusmerzin.github.io/ants).
 
 ## Table of contents
-* [Setup](#Setup)
-  * [Downloading and installing](#Downloading-and-installing)
-  * [Running the app](#Running-the-app)
-  * [Running tests](#Running-tests)
-  * [Production build](#Production-build)
-  * [GitHub pages](#GitHub-pages)
-* [User interface](#User-interface)
-* [Algorithm](#Algorithm)
-* [Mathematics](#Mathematics)
-  * [One neighbour in range](#One-neighbour-in-range)
-  * [Multiple neighbours in range](#Multiple-neighbours-in-range)
-  * [No neighbours in range](#No-neighbours-in-range)
-* [Summary](#Summary)
+
+- [Setup](#Setup)
+  - [Downloading and installing](#Downloading-and-installing)
+  - [Running the app](#Running-the-app)
+  - [Running tests](#Running-tests)
+  - [Production build](#Production-build)
+  - [GitHub pages](#GitHub-pages)
+- [User interface](#User-interface)
+- [Algorithm](#Algorithm)
+- [Mathematics](#Mathematics)
+  - [One neighbour in range](#One-neighbour-in-range)
+  - [Multiple neighbours in range](#Multiple-neighbours-in-range)
+  - [No neighbours in range](#No-neighbours-in-range)
+- [Summary](#Summary)
 
 ## Setup
 
 I used [Node.js](https://nodejs.org) 14.0.0 and [Yarn](https://classic.yarnpkg.com) 1.22.4 while developing this project.
 
-> Note: I found out that with these versions of Node.js and Yarn and with node-sass versions 4.13.1 and 4.14.0 using CSS variables `var(--`*var*`)` in `calc()` functions compiles in development mode but throws an error during `react-scripts build`. In such cases I used Sass variables.
+> Note: I found out that with these versions of Node.js and Yarn and with node-sass versions 4.13.1 and 4.14.0 using CSS variables `var(--`_var_`)` in `calc()` functions compiles in development mode but throws an error during `react-scripts build`. In such cases I used Sass variables.
 
 Module versions and scripts are available in [package.json](https://github.com/rasmusmerzin/ants/blob/master/package.json).
 
@@ -83,7 +84,6 @@ For each [Ant](https://github.com/rasmusmerzin/ants/blob/master/src/logic/Ant.ts
 
 A velocity for each ant is calculated every frame depending on the count of peers in range.
 
-
 ### One peer in range
 
 When there is another ant in distancing range **`R`** the a distancing push **`p`** will be calculated.
@@ -100,7 +100,6 @@ When there is only one neighbour in range the velocity of the given ant is equal
 `p` ‒ distancing push
 
 <img src='./docs/formula_01.svg' alt='p=k*R/d' />
-
 
 ### Multiple peers in range
 
@@ -122,7 +121,8 @@ When there are no peers in range ant's velocity will be turned at random to left
 <img src='./docs/diagram_03.svg' alt='diagram 3' />
 
 `l` ‒ previous frame's velocity  
-`α` ‒ amount to change velocity direction based on ants agility  
+`α` ‒ amount to change velocity direction based on ants agility
+
 > `(Math.random() -.5) *2 *`_agility_
 
 ## Summary
